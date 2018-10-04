@@ -4,7 +4,7 @@ import pymongo
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-hostName = ""
+hostName = "localhost"
 hostPort = 8000
 
 mydbclient = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -40,11 +40,6 @@ class MyServer(BaseHTTPRequestHandler):
             self.send_response(200, "OK")
             self.send_header("author", searchResult)
             self.end_headers()
-            
-        #elif(self.path == "/addProject"):
-            
-
-        #elif(self.path == "/removeProject"):
 
         else:
             self.send_response(404, "Not found")
@@ -53,7 +48,7 @@ class MyServer(BaseHTTPRequestHandler):
         
 
 myServer = HTTPServer((hostName, hostPort), MyServer)
-print(time.asctime(), "Server Starts - %s:%s" % (hostName, hostPort))
+print("Webserver up and running at %s:%s" % (hostName, hostPort), time.asctime())
 
 try:
 	myServer.serve_forever()
@@ -61,4 +56,4 @@ except KeyboardInterrupt:
 	pass
 
 myServer.server_close()
-print(time.asctime(), "Server Stops - %s:%s" % (hostName, hostPort))
+print("Bye ", time.asctime())
