@@ -1,0 +1,95 @@
+#Test with: http://editor.swagger.io/
+
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Krajono - author_ms
+  description: Microservicio para gestionar y guardar la informaciones de los autores de los proyectos en Kranojo.
+  license:
+    name: Versioning
+host: localhost:8000
+basePath: /api/projects
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /create:
+    post:
+      summary: Crear un nuevo autor
+      operationId: createAuthor
+      parameters:
+        - name: author
+          in: body
+          required: true
+        - projects
+          in: body
+          required: false
+          description: Crear un nuevo autor
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+    /search:
+    post:
+      summary: Buscar un autor
+      operationId: searchAuthor
+      parameters:
+        - name: author
+          in: body
+          required: true
+          description: Buscar un nuevo autor
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+    /author:
+    post:
+      summary: Ver la información de un autor
+      operationId: author
+      parameters:
+        - id: author_id
+          in: body
+          required: true
+          description: Ver la información de un autor
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+definitions:
+  # Author
+  Author:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      projects:
+        type: object
+        
+
+# Errors
+  ErrorModel:
+    type: object
+    required:
+      - message
+      - code
+    properties:
+      message:
+        type: string
+      code:
+        type: number
+      description:
+        type: object
