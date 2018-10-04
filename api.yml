@@ -4,7 +4,7 @@ swagger: '2.0'
 info:
   version: 1.0.0
   title: Krajono - author_ms
-  description: Microservicio para gestionar y guardar la informaciones de los autores de los proyectos en Kranojo.
+  description: Microservicio para gestionar y guardar la informaciones de los autores de los proyectos en Krajono.
   license:
     name: Versioning
 host: localhost:8000
