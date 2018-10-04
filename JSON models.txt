@@ -1,0 +1,36 @@
+/create
+
+{
+	id: [integer],
+	name: [string],
+	projects: 
+	{
+		{id: [integer]},
+		{id: [integer]},
+		...	
+	}
+}
+
+/search
+
+{
+	name: [string]
+}	
+
+/author
+
+{
+	id:[integer]
+}
+
+/addProject
+
+{
+	id:[integer]
+}
+
+/removeProject
+
+{
+	id:[integer]
+}
