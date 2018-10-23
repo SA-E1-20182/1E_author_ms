@@ -7,7 +7,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 hostName = "localhost"
 hostPort = 8000
 
-mydbclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydbclient = pymongo.MongoClient("mongodb://localhost:27018/")
 mydb = mydbclient["author_db"]
 authors = mydb["authors"]
 

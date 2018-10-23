@@ -3,12 +3,7 @@
 {
 	id: [integer],
 	name: [string],
-	projects: 
-	{
-		{id: [integer]},
-		{id: [integer]},
-		...	
-	}
+	[id_0, id_1, id_2]
 }
 
 /search
