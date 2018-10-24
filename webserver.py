@@ -4,14 +4,12 @@ import pymongo
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-hostName = "localhost"
-hostPort = 8000
+hostName = "0.0.0.0"
+hostPort = 7999
 
-mydbclient = pymongo.MongoClient("mongodb://localhost:27018/")
+mydbclient = pymongo.MongoClient("mongodb://192.168.99.101:27018/")
 mydb = mydbclient["author_db"]
 authors = mydb["authors"]
-
-print("lalalalalalalal")
 
 class MyServer(BaseHTTPRequestHandler):
     def do_POST(self):

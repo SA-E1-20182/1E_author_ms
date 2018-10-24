@@ -1,1 +1,5 @@
-python3 /webserver.py -m http.server 8000
+python3 webserver.py
+while true
+do 
+sleep 100
+done
