@@ -1,0 +1,18 @@
+version: '2.1'
+services:
+  authors_ms:
+    build: .
+    container_name: author_ms
+    depends_on:
+      - authors_db
+    links:
+      - authors_db
+    ports:
+      - "8000:8000"
+  authors_db:
+    image: mongo:3.3
+    container_name: author_db
+    ports:
+      - "27018:27018"
+    volumes:
+      - ./backup:/backup:rw

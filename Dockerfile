@@ -1,8 +1,10 @@
-FROM python:3
+FROM python:latest
 
 ADD webserver.py /
+ADD entrypoint.sh /
 
 RUN pip install pymongo
 
 EXPOSE 8000
-CMD [ "python", "./webserver.py" ]
+RUN chmod +x entrypoint.sh
+CMD "./entrypoint.sh"

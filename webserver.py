@@ -11,11 +11,12 @@ mydbclient = pymongo.MongoClient("mongodb://localhost:27018/")
 mydb = mydbclient["author_db"]
 authors = mydb["authors"]
 
+print("lalalalalalalal")
+
 class MyServer(BaseHTTPRequestHandler):
-    
     def do_POST(self):
         print( "Incomming POST to host", self.path )
-
+        
         if(self.path == "/create"):
             content_length = int(self.headers['Content-Length']) 
             post_data = json.loads(self.rfile.read(content_length))
