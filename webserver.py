@@ -9,9 +9,16 @@ app.config['MONGO_URI'] = 'mongodb://localhost:27017/author_db'
 
 mongo = PyMongo(app)
 
+@app.route('/author/search/all', methods=['GET'])
+def get_all_authors():
+    db = mongo.db.author_db
+    output = []
+    for q in db.find():
+        output.append({'username' : q['username'], 'name' : q['name'], 'projects' : q['projects']})
+    return jsonify({'result' : output})
 
 @app.route('/author/<username>', methods=['GET'])
-def get_one_author(username):
+def get_author(username):
     db = mongo.db.author_db
     q = db.find_one({'username' : username})
     if q:
@@ -21,7 +28,7 @@ def get_one_author(username):
     return jsonify({'result' : output})
 
 @app.route('/author/create', methods=['POST'])
-def add_framework():
+def create_author():
     db = mongo.db.author_db 
     username = request.json['username']
     name = request.json['name']
@@ -36,12 +43,26 @@ def add_framework():
         return jsonify({'result' : output})
 
 @app.route('/author/<username>', methods=['DELETE'])
-def delete_one_author(username):
+def delete_author(username):
     db = mongo.db.author_db
     output = db.delete_one({'username' : username}).acknowledged
     return jsonify({'result' : output})
     
+@app.route('/author/<username>/addProject', methods=['PATCH'])
+def add_project(username):
+    db = mongo.db.author_db
+    project = request.json['project']
+    output = db.update_one({'username': username}, {'$push': {'projects': project}}).acknowledged
+    return jsonify({'result' : output})
+
+@app.route('/author/<username>/removeProject', methods=['PATCH'])
+def add_project(username):
+    db = mongo.db.author_db
+    project = request.json['project']
+    output = db.update_one({'username': username}, {'$pull': {'projects': project}}).acknowledged
+    return jsonify({'result' : output})
 
 
+    
 if __name__ == '__main__':
     app.run(debug=True)
