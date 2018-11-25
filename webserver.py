@@ -1,58 +1,47 @@
-﻿import socket
-import time
-import pymongo
-import json
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from flask import Flask, jsonify, request
+from flask_pymongo import PyMongo
 
-hostName = "0.0.0.0"
-hostPort = 7999
 
-mydbclient = pymongo.MongoClient("mongodb://192.168.99.101:27018/")
-mydb = mydbclient["author_db"]
-authors = mydb["authors"]
+app = Flask(__name__)
 
-class MyServer(BaseHTTPRequestHandler):
-    def do_POST(self):
-        print( "Incomming POST to host", self.path )
-        
-        if(self.path == "/create"):
-            content_length = int(self.headers['Content-Length']) 
-            post_data = json.loads(self.rfile.read(content_length))
-            authors.insert_one(post_data)
-            self.send_response(200, "OK")
-            self.end_headers()
+app.config['MONGO_DBNAME'] = 'author_db'
+app.config['MONGO_URI'] = 'mongodb://localhost:27017/author_db'
 
-        elif(self.path == "/search"):
-            content_length = int(self.headers['Content-Length']) 
-            post_data = json.loads(self.rfile.read(content_length))
-            searchResult = []
-            for x in authors.find(post_data):
-                searchResult.append(x)                
-            self.send_response(200, "OK")
-            self.send_header("result", searchResult)
-            self.end_headers()
+mongo = PyMongo(app)
 
-        elif(self.path == "/author"):
-            content_length = int(self.headers['Content-Length']) 
-            post_data = json.loads(self.rfile.read(content_length))
-            searchResult = authors.find_one(post_data)
-            self.send_response(200, "OK")
-            self.send_header("author", searchResult)
-            self.end_headers()
 
-        else:
-            self.send_response(404, "Not found")
-            self.end_headers()
-        
-        
+@app.route('/author/<username>', methods=['GET'])
+def get_one_author(username):
+    db = mongo.db.author_db
+    q = db.find_one({'username' : username})
+    if q:
+        output = {'username' : q['username'], 'name' : q['name'], 'projects' : q['projects']}
+    else:
+        output = 'No results found'
+    return jsonify({'result' : output})
 
-myServer = HTTPServer((hostName, hostPort), MyServer)
-print("Webserver up and running at %s:%s" % (hostName, hostPort), time.asctime())
+@app.route('/author/create', methods=['POST'])
+def add_framework():
+    db = mongo.db.author_db 
+    username = request.json['username']
+    name = request.json['name']
+    projects = request.json['projects']
+    q = db.find_one({'username' : username})
+    if q:
+        output = 'Author already exists'
+    else:    
+        author_id = db.insert_one({'username' : username, 'name' : name, 'projects' : projects}).inserted_id
+        new_author = db.find_one({'_id' : author_id})
+        output = {'username' : new_author['username'], 'name' : new_author['name'],  'projects' : new_author['projects']}
+        return jsonify({'result' : output})
 
-try:
-	myServer.serve_forever()
-except KeyboardInterrupt:
-	pass
+@app.route('/author/<username>', methods=['DELETE'])
+def delete_one_author(username):
+    db = mongo.db.author_db
+    output = db.delete_one({'username' : username}).acknowledged
+    return jsonify({'result' : output})
+    
 
-myServer.server_close()
-print("Bye ", time.asctime())
+
+if __name__ == '__main__':
+    app.run(debug=True)
