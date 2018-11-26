@@ -5,7 +5,7 @@ services:
         ports:
             - "5000:5000"
         depends_on:
-            - author_db
+            - authors_db
     authors_db:
         image: mongo:3.3
         command: mongod --port 27018
