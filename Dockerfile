@@ -1,5 +1,5 @@
 FROM python:3
-EXPOSE 5000
+EXPOSE 7999
 ADD webserver.py /
 ADD entrypoint.sh /
 RUN python3 -m pip install pymongo
