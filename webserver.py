@@ -3,10 +3,9 @@ from flask_pymongo import PyMongo
 
 
 app = Flask(__name__)
-app.run(host='0.0.0.0', port=7999)
 app.config['MONGO_DBNAME'] = 'authors_db'
 #app.config['MONGO_URI'] = 'mongodb://localhost:27018/authors_db'
-app.config['MONGO_URI'] = 'mongodb://192.168.99.101:27018/authors_db'
+app.config['MONGO_URI'] = 'mongodb://localhost:27017/authors_db'
 
 mongo = PyMongo(app)
 db = mongo.db.authors_db
@@ -61,4 +60,5 @@ def remove_project(username):
 
     
 if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=7999)
     app.run(debug=True)
