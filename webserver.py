@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+﻿from flask import Flask, jsonify, request
 from flask_pymongo import PyMongo
 
 
@@ -60,5 +60,9 @@ def remove_project(username):
 
 
 if __name__ == '__main__':
+    ldap_server="35.247.37.179"
+    username="jdnietov"
+    password="contrasena"
+
     app.run(host='0.0.0.0', port=7999)
     app.run(debug=True)
